@@ -2,7 +2,6 @@
 from openai import OpenAI
 from typing import Optional
 from config import APIConfig
-
 class WhisperTranscriber:
     """Class to handle Whisper API transcription"""
 
