@@ -1,0 +1,10 @@
+# Ignore Python bytecode and venv
+*.pyc
+__pycache__/
+venv/
+
+# PyCharm project settings
+.idea/
+
+.env
+
