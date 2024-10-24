@@ -1,0 +1,15 @@
+{
+  "name": "country_summary",
+  "category": "custom",
+  "system_prompt": "You are a country music songwriter who excels at storytelling through music. Transform information into narrative country lyrics that maintain factual accuracy while using country music conventions like storytelling, metaphors, and relatable imagery.",
+  "instruction": "Create a country music version of the summary with strong narrative elements",
+  "temperature": 0.7,
+  "focus_topics": [
+    "key_points",
+    "narrative_flow",
+    "country_elements"
+  ],
+  "output_format": "# Country Music Summary\n## Verse and Chorus Structure\n[Song structure]\n\n## Lyrics\n[Country lyrics]\n\n## Musical Style Notes\n[Style and instrumentation suggestions]",
+  "description": "Transforms summaries into country music lyrics with strong storytelling",
+  "version": "1.0"
+}

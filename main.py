@@ -5,6 +5,7 @@ from config import get_config
 from whisper_transcriber import WhisperTranscriber
 from gpt_analyzer import TranscriptionAnalyzer
 from template_manager import TemplateManager, TemplateCategory, TemplateConfig
+from musical_templates import install_musical_templates
 
 
 def handle_template_management(template_manager: TemplateManager, args) -> None:
@@ -50,6 +51,30 @@ def handle_template_management(template_manager: TemplateManager, args) -> None:
     return False
 
 
+def handle_musical_summary(analyzer, transcription, style, include_original):
+    """Handle musical summary generation"""
+    # First get regular summary
+    summary = analyzer.analyze_transcription(
+        transcription=transcription,
+        template_name="summary"
+    )
+
+    if not summary:
+        return None
+
+    # Then convert to musical version
+    style_template = f"{style}_summary"
+    musical_version = analyzer.analyze_transcription(
+        transcription=summary,  # Use summary as input
+        template_name=style_template,
+        additional_context="This is a musical interpretation of a factual summary."
+    )
+
+    if include_original:
+        return f"Original Summary:\n{summary}\n\nMusical Version:\n{musical_version}"
+    return musical_version
+
+
 def main(
         audio_file_path: Optional[str] = None,
         template: str = "default",
@@ -58,6 +83,8 @@ def main(
         exclude_topics: Optional[List[str]] = None,
         context: Optional[str] = None,
         temperature: Optional[float] = None,
+        musical_style: Optional[str] = None,
+        include_original: bool = False
 ) -> None:
     """
     Main function to orchestrate transcription and analysis
@@ -68,6 +95,7 @@ def main(
 
         # Initialize template manager
         template_manager = TemplateManager()
+        install_musical_templates(template_manager)
 
         # Initialize services
         transcriber = WhisperTranscriber(config)
@@ -118,6 +146,21 @@ def main(
         print(gpt_response)
         print("=" * 50)
 
+        # Handle musical summary if style is specified
+        if musical_style:
+            print(f"\nGenerating {musical_style} musical summary...")
+            musical_summary = handle_musical_summary(
+                analyzer,
+                transcription,
+                musical_style,
+                include_original
+            )
+            if musical_summary:
+                print("\nMusical Summary:")
+                print("=" * 50)
+                print(musical_summary)
+                print("=" * 50)
+
     except ValueError as e:
         print(f"Configuration error: {e}")
     except Exception as e:
@@ -164,6 +207,7 @@ if __name__ == "__main__":
                                 help='Path to the audio file')
 
     analysis_group.add_argument('--template',
+                                default="default",
                                 help='Analysis template to use')
 
     analysis_group.add_argument('--focus',
@@ -176,6 +220,15 @@ if __name__ == "__main__":
 
     analysis_group.add_argument('--context',
                                 help='Additional context for the analysis')
+
+    # Musical arguments
+    music_group = parser.add_argument_group('Musical Summary')
+    music_group.add_argument('--musical-style',
+                            choices=['hiphop', 'country', 'ballad'],
+                            help='Convert summary to musical style')
+    music_group.add_argument('--include-original',
+                            action='store_true',
+                            help='Include original summary with musical version')
 
     args = parser.parse_args()
 
@@ -195,5 +248,7 @@ if __name__ == "__main__":
         focus_topics=args.focus,
         exclude_topics=args.exclude,
         context=args.context,
-        temperature=args.temperature
+        temperature=args.temperature,
+        musical_style=args.musical_style,
+        include_original=args.include_original
     )

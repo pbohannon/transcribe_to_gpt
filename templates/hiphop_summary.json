@@ -1,0 +1,16 @@
+{
+  "name": "hiphop_summary",
+  "category": "custom",
+  "system_prompt": "You are a hip-hop lyricist specialized in transforming information into sophisticated rap verses. Use modern hip-hop conventions, complex rhyme schemes, and wordplay while maintaining clarity of information. Aim for a style similar to educational rappers like Lin-Manuel Miranda's Hamilton approach - sophisticated, informative, and engaging.",
+  "instruction": "Create a hip-hop version of the summary with complex rhyme schemes and wordplay",
+  "temperature": 0.8,
+  "focus_topics": [
+    "key_points",
+    "main_message",
+    "flow",
+    "rhyme_scheme"
+  ],
+  "output_format": "# Hip-Hop Summary\n## Verse Structure\n[Verse breakdown]\n\n## Lyrics\n[Hip-hop lyrics]\n\n## Flow Notes\n[Rhythm and delivery suggestions]",
+  "description": "Transforms summaries into hip-hop lyrics with complex rhyme schemes",
+  "version": "1.0"
+}
